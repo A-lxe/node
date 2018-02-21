@@ -1,11 +1,15 @@
-import {createRequire} from '../../common/index.mjs';
+import { createRequire } from "../../common/index.mjs";
 
 const require = createRequire(import.meta.url);
-const dep = require('./loader-dep.js');
+const dep = require("./loader-dep.js");
 
-export function resolve (specifier, base, defaultResolve) {
+export default ({ resolve: parentResolve }) => {
   return {
-    url: defaultResolve(specifier, base).url,
-    format: dep.format
+    async resolve(specifier, base) {
+      return {
+        url: (await parentResolve(specifier, base)).url,
+        format: dep.format
+      };
+    }
   };
-}
+};

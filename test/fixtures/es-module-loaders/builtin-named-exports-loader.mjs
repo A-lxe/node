@@ -1,24 +1,30 @@
-import module from 'module';
+import module, { builtinModules } from "module";
 
-export function dynamicInstantiate(url) {
-  const builtinInstance = module._load(url.substr(5));
-  const builtinExports = ['default', ...Object.keys(builtinInstance)];
+export default ({
+  resolve: parentResolve
+}) => {
   return {
-    exports: builtinExports,
-    execute: exports => {
-      for (let name of builtinExports)
-        exports[name].set(builtinInstance[name]);
-      exports.default.set(builtinInstance);
+    dynamicInstantiate(url) {
+      const builtinInstance = module._load(url.substr(5));
+      const builtinExports = ['default', ...Object.keys(builtinInstance)];
+      return {
+        exports: builtinExports,
+        execute: exports => {
+          for (let name of builtinExports)
+            exports[name].set(builtinInstance[name]);
+          exports.default.set(builtinInstance);
+        }
+      };
+    },
+
+    resolve(specifier, base) {
+      if (builtinModules.includes(specifier)) {
+        return {
+          url: `node:${specifier}`,
+          format: 'dynamic'
+        };
+      }
+      return parentResolve(specifier, base);
     }
   };
-}
-
-export function resolve(specifier, base, defaultResolver) {
-  if (module.builtinModules.includes(specifier)) {
-    return {
-      url: `node:${specifier}`,
-      format: 'dynamic'
-    };
-  }
-  return defaultResolver(specifier, base);
 }

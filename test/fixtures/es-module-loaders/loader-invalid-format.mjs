@@ -1,8 +1,15 @@
-export async function resolve(specifier, parentModuleURL, defaultResolve) {
-  if (parentModuleURL && specifier === '../fixtures/es-modules/test-esm-ok.mjs') {
-    return {
-      url: 'file:///asdf'
-    };
-  }
-  return defaultResolve(specifier, parentModuleURL);
-}
+export default ({ resolve: parentResolve }) => {
+  return {
+    async resolve(specifier, parentModuleURL) {
+      if (
+        parentModuleURL &&
+        specifier === "../fixtures/es-modules/test-esm-ok.mjs"
+      ) {
+        return {
+          url: "file:///asdf"
+        };
+      }
+      return await parentResolve(specifier, parentModuleURL);
+    }
+  };
+};
