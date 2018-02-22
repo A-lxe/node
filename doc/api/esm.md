@@ -597,7 +597,8 @@ export default function(parent) {
           format: 'builtin'
         };
       }
-      if (/^\.{0,2}[/]/.test(specifier) !== true && !specifier.startsWith('file:')) {
+      if (/^\.{0,2}[/]/.test(specifier) !== true &&
+        !specifier.startsWith('file:')) {
         // For node_modules support:
         // return parent.resolve(specifier, parentModuleURL);
         throw new Error(

@@ -1478,6 +1478,12 @@ behavior. See the documentation for [policy] manifests for more information.
 An attempt was made to allocate memory (usually in the C++ layer) but it
 failed.
 
+<a id="ERR_LOADER_HOOK_BAD_TYPE"></a>
+### ERR_LOADER_HOOK_BAD_TYPE
+
+An Loader defined an invalid value for a hook. See the documentation for
+[ECMAScript Modules][] for more information.
+
 <a id="ERR_METHOD_NOT_IMPLEMENTED"></a>
 ### ERR_METHOD_NOT_IMPLEMENTED
 
@@ -1494,6 +1500,10 @@ strict compliance with the API specification (which in some cases may accept
 
 <a id="ERR_MISSING_DYNAMIC_INSTANTIATE_HOOK"></a>
 ### ERR_MISSING_DYNAMIC_INSTANTIATE_HOOK
+
+A Loader resolved an import to a "dynamic" format, but no hook for
+`dynamicInstantiate` was declared. See Loader hook documentation in
+[ECMAScript Modules][].
 
 > Stability: 1 - Experimental
 
@@ -2364,6 +2374,7 @@ such as `process.stdout.on('data')`.
 [`dgram.disconnect()`]: dgram.html#dgram_socket_disconnect
 [`dgram.remoteAddress()`]: dgram.html#dgram_socket_remoteaddress
 [`errno`(3) man page]: http://man7.org/linux/man-pages/man3/errno.3.html
+[ECMAScript Modules]: esm.html
 [`fs.readFileSync`]: fs.html#fs_fs_readfilesync_path_options
 [`fs.readdir`]: fs.html#fs_fs_readdir_path_options_callback
 [`fs.symlink()`]: fs.html#fs_fs_symlink_target_path_type_callback
