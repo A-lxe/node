@@ -540,16 +540,23 @@ The resolve hook returns the resolved file URL and module format for a
 given module specifier and parent file URL:
 
 ```js
+// Example loader that treats all files within the current working directory as
+// ECMAScript Modules
 const baseURL = new URL(`${process.cwd()}/`, 'file://');
 
 export default function(parent) {
   return {
     async resolve(specifier,
                   parentModuleURL = baseURL) {
-      return {
-        url: new URL(specifier, parentModuleURL).href,
-        format: 'esm'
-      };
+      const location = new URL(specifier, parentModuleURL);
+      if (locations.host === baseURL.host &&
+          location.pathname.startsWith(baseURL.pathname)) {
+        return {
+          url: location.href,
+          format: 'esm'
+        };
+      }
+      return parent.resolve(specifier, parentModuleURL);
     }
   };
 }
@@ -637,16 +644,25 @@ This hook is called only for modules that return `format: 'dynamic'` from
 the `resolve` hook.
 
 ```js
+// Example loader that can generate modules for .txt files
+// that resolved to a 'dynamic' format
+import fs from 'fs';
+import util from 'util';
 export default function(parent) {
   return {
-    dynamicInstantiate(url) {
-      return {
-        exports: ['customExportName'],
-        execute: (exports) => {
-          // Methods get and set provided for pre-allocated export names
-          exports.customExportName.set('value');
-        }
-      };
+    async dynamicInstantiate(url) {
+      const location = new URL(url);
+      if (location.pathname.slice(-4) === '.txt') {
+        const text = String(await util.promisify(fs.readFile)(location));
+        return {
+          exports: ['text'],
+          execute: (exports) => {
+            // Methods get and set provided for pre-allocated export names
+            exports.text.set(text);
+          }
+        };
+      }
+      return parent.dynamicInstantiate(url);
     }
   };
 }
