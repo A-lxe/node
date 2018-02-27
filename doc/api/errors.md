@@ -1481,7 +1481,7 @@ failed.
 <a id="ERR_LOADER_HOOK_BAD_TYPE"></a>
 ### ERR_LOADER_HOOK_BAD_TYPE
 
-An Loader defined an invalid value for a hook. See the documentation for
+A Loader defined an invalid value for a hook. See the documentation for
 [ECMAScript Modules][] for more information.
 
 <a id="ERR_METHOD_NOT_IMPLEMENTED"></a>
