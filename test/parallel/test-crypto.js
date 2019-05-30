@@ -228,8 +228,10 @@ assert.throws(function() {
   // -----BEGIN PRIVATE KEY----- and -----END PRIVATE KEY-----
   // instead of
   // -----BEGIN RSA PRIVATE KEY----- and -----END RSA PRIVATE KEY-----
-  const sha1_privateKey = fixtures.readKey('rsa_private_pkcs8_bad.pem',
-                                            'ascii');
+  const sha1_privateKey = fixtures.readKey(
+    'rsa_private_pkcs8_bad.pem',
+    'ascii'
+  );
   // This would inject errors onto OpenSSL's error stack
   crypto.createSign('sha1').sign(sha1_privateKey);
 }, (err) => {

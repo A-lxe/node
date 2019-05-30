@@ -16,12 +16,16 @@ const keyPem = fixtures.readKey('rsa_private.pem');
 const rsaKeySize = 2048;
 const rsaPubPem = fixtures.readKey('rsa_public.pem', 'ascii');
 const rsaKeyPem = fixtures.readKey('rsa_private.pem', 'ascii');
-const rsaKeyPemEncrypted = fixtures.readKey('rsa_private_encrypted.pem',
-                                             'ascii');
+const rsaKeyPemEncrypted = fixtures.readKey(
+  'rsa_private_encrypted.pem',
+  'ascii'
+);
 const dsaPubPem = fixtures.readKey('dsa_public.pem', 'ascii');
 const dsaKeyPem = fixtures.readKey('dsa_private.pem', 'ascii');
-const dsaKeyPemEncrypted = fixtures.readKey('dsa_private_encrypted.pem',
-                                             'ascii');
+const dsaKeyPemEncrypted = fixtures.readKey(
+  'dsa_private_encrypted.pem',
+  'ascii'
+);
 const rsaPkcs8KeyPem = fixtures.readKey('rsa_private_pkcs8.pem');
 const dsaPkcs8KeyPem = fixtures.readKey('dsa_private_pkcs8.pem');
 
@@ -190,7 +194,10 @@ let rsaVerify = crypto.createVerify('SHA1');
 assert.ok(rsaSign);
 assert.ok(rsaVerify);
 
-const expectedSignature = fixtures.readKey('rsa_public_sha1_signature_signedby_rsa_private_pkcs8.sha1', 'hex');
+const expectedSignature = fixtures.readKey(
+  'rsa_public_sha1_signature_signedby_rsa_private_pkcs8.sha1',
+  'hex'
+);
 
 rsaSign.update(rsaPubPem);
 let rsaSignature = rsaSign.sign(rsaKeyPem, 'hex');
@@ -236,7 +243,10 @@ assert.throws(() => {
 
   const input = 'I AM THE WALRUS';
 
-  const signature = fixtures.readKey('I_AM_THE_WALRUS_sha256_signature_signedby_rsa_private_b.sha256', 'hex');
+  const signature = fixtures.readKey(
+    'I_AM_THE_WALRUS_sha256_signature_signedby_rsa_private_b.sha256',
+    'hex'
+  );
 
   const sign = crypto.createSign('SHA256');
   sign.update(input);

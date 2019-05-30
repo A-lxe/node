@@ -626,7 +626,10 @@ common.expectsError(
 
   rsaSign.update(rsaPubPem);
   const rsaSignature = rsaSign.sign(rsaKeyPem, 'hex');
-  const expectedSignature = fixtures.readKey('rsa_public_sha1_signature_signedby_rsa_private.sha1', 'hex')
+  const expectedSignature = fixtures.readKey(
+    'rsa_public_sha1_signature_signedby_rsa_private.sha1',
+    'hex'
+  );
   assert.strictEqual(rsaSignature, expectedSignature);
 
   rsaVerify.update(rsaPubPem);
@@ -642,7 +645,10 @@ common.expectsError(
 
   const input = 'I AM THE WALRUS';
 
-  const signature = fixtures.readKey('I_AM_THE_WALRUS_sha256_signature_signedby_rsa_private_b.sha256', 'hex');
+  const signature = fixtures.readKey(
+    'I_AM_THE_WALRUS_sha256_signature_signedby_rsa_private_b.sha256',
+    'hex'
+  );
 
   const sign = crypto.createSign('SHA256');
   sign.update(input);
