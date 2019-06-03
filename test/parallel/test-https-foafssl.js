@@ -40,8 +40,8 @@ const options = {
 };
 
 const webIdUrl = 'URI:http://example.com/#me';
-const modulus = fixtures.readKey('rsa_cert_foafssl_b.modulus', 'ascii').replace(/\n/g, '');
-const exponent = fixtures.readKey('rsa_cert_foafssl_b.exponent', 'ascii').replace(/\n/g, '');
+const modulus = fixtures.readKey('rsa_cert_foafssl_b.modulus', 'ascii').replace(/\r?\n/g, '');
+const exponent = fixtures.readKey('rsa_cert_foafssl_b.exponent', 'ascii').replace(/\r?\n/g, '');
 
 const CRLF = '\r\n';
 const body = 'hello world\n';

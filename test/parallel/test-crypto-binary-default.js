@@ -621,10 +621,14 @@ common.expectsError(
   // Test RSA key signing/verification
   const rsaSign = crypto.createSign('SHA1');
   const rsaVerify = crypto.createVerify('SHA1');
+
+  // Expected signature was generated on unix, so Windows \r must be removed.
+  const input = rsaPubPem.replace(/\r/g, '');
+
   assert.ok(rsaSign instanceof crypto.Sign);
   assert.ok(rsaVerify instanceof crypto.Verify);
 
-  rsaSign.update(rsaPubPem);
+  rsaSign.update(input);
   const rsaSignature = rsaSign.sign(rsaKeyPem, 'hex');
   const expectedSignature = fixtures.readKey(
     'rsa_public_sha1_signature_signedby_rsa_private.sha1',
@@ -632,7 +636,7 @@ common.expectsError(
   );
   assert.strictEqual(rsaSignature, expectedSignature);
 
-  rsaVerify.update(rsaPubPem);
+  rsaVerify.update(input);
   assert.strictEqual(rsaVerify.verify(rsaPubPem, rsaSignature, 'hex'), true);
 }
 

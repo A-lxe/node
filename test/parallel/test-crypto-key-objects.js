@@ -202,7 +202,10 @@ const privateDsa = fixtures.readKey('dsa_private_encrypted_1025.pem',
     assert.strictEqual(key.type, 'private');
     assert.strictEqual(key.asymmetricKeyType, keyType);
     assert.strictEqual(key.symmetricKeySize, undefined);
-    assert.strictEqual(key.export(exportOptions), info.private);
+    assert.strictEqual(
+      key.export(exportOptions),
+      info.private.replace(/\r/g, '')
+    );
   }
 
   {
@@ -212,7 +215,10 @@ const privateDsa = fixtures.readKey('dsa_private_encrypted_1025.pem',
       assert.strictEqual(key.type, 'public');
       assert.strictEqual(key.asymmetricKeyType, keyType);
       assert.strictEqual(key.symmetricKeySize, undefined);
-      assert.strictEqual(key.export(exportOptions), info.public);
+      assert.strictEqual(
+        key.export(exportOptions),
+        info.public.replace(/\r/g, '')
+      );
     });
   }
 });

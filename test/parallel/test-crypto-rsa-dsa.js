@@ -185,50 +185,54 @@ test_rsa('RSA_PKCS1_PADDING');
 test_rsa('RSA_PKCS1_OAEP_PADDING');
 
 // Test RSA key signing/verification
-let rsaSign = crypto.createSign('SHA1');
-let rsaVerify = crypto.createVerify('SHA1');
-assert.ok(rsaSign);
-assert.ok(rsaVerify);
+{
+  let rsaSign = crypto.createSign('SHA1');
+  let rsaVerify = crypto.createVerify('SHA1');
+  assert.ok(rsaSign);
+  assert.ok(rsaVerify);
 
-const expectedSignature = fixtures.readKey(
-  'rsa_public_sha1_signature_signedby_rsa_private_pkcs8.sha1',
-  'hex'
-);
+  // Expected signature was generated on unix, so Windows \r must be removed.
+  const input = rsaPubPem.replace(/\r/g, '');
+  const expectedSignature = fixtures.readKey(
+    'rsa_public_sha1_signature_signedby_rsa_private_pkcs8.sha1',
+    'hex'
+  );
 
-rsaSign.update(rsaPubPem);
-let rsaSignature = rsaSign.sign(rsaKeyPem, 'hex');
-assert.strictEqual(rsaSignature, expectedSignature);
+  rsaSign.update(input);
+  let rsaSignature = rsaSign.sign(rsaKeyPem, 'hex');
+  assert.strictEqual(rsaSignature, expectedSignature);
 
-rsaVerify.update(rsaPubPem);
-assert.strictEqual(rsaVerify.verify(rsaPubPem, rsaSignature, 'hex'), true);
+  rsaVerify.update(input);
+  assert.strictEqual(rsaVerify.verify(rsaPubPem, rsaSignature, 'hex'), true);
 
-// Test RSA PKCS#8 key signing/verification
-rsaSign = crypto.createSign('SHA1');
-rsaSign.update(rsaPubPem);
-rsaSignature = rsaSign.sign(rsaPkcs8KeyPem, 'hex');
-assert.strictEqual(rsaSignature, expectedSignature);
+  // Test RSA PKCS#8 key signing/verification
+  rsaSign = crypto.createSign('SHA1');
+  rsaSign.update(input);
+  rsaSignature = rsaSign.sign(rsaPkcs8KeyPem, 'hex');
+  assert.strictEqual(rsaSignature, expectedSignature);
 
-rsaVerify = crypto.createVerify('SHA1');
-rsaVerify.update(rsaPubPem);
-assert.strictEqual(rsaVerify.verify(rsaPubPem, rsaSignature, 'hex'), true);
+  rsaVerify = crypto.createVerify('SHA1');
+  rsaVerify.update(input);
+  assert.strictEqual(rsaVerify.verify(rsaPubPem, rsaSignature, 'hex'), true);
 
-// Test RSA key signing/verification with encrypted key
-rsaSign = crypto.createSign('SHA1');
-rsaSign.update(rsaPubPem);
-const signOptions = { key: rsaKeyPemEncrypted, passphrase: 'password' };
-rsaSignature = rsaSign.sign(signOptions, 'hex');
-assert.strictEqual(rsaSignature, expectedSignature);
+  // Test RSA key signing/verification with encrypted key
+  rsaSign = crypto.createSign('SHA1');
+  rsaSign.update(input);
+  const signOptions = { key: rsaKeyPemEncrypted, passphrase: 'password' };
+  rsaSignature = rsaSign.sign(signOptions, 'hex');
+  assert.strictEqual(rsaSignature, expectedSignature);
 
-rsaVerify = crypto.createVerify('SHA1');
-rsaVerify.update(rsaPubPem);
-assert.strictEqual(rsaVerify.verify(rsaPubPem, rsaSignature, 'hex'), true);
+  rsaVerify = crypto.createVerify('SHA1');
+  rsaVerify.update(input);
+  assert.strictEqual(rsaVerify.verify(rsaPubPem, rsaSignature, 'hex'), true);
 
-rsaSign = crypto.createSign('SHA1');
-rsaSign.update(rsaPubPem);
-assert.throws(() => {
-  const signOptions = { key: rsaKeyPemEncrypted, passphrase: 'wrong' };
-  rsaSign.sign(signOptions, 'hex');
-}, decryptError);
+  rsaSign = crypto.createSign('SHA1');
+  rsaSign.update(input);
+  assert.throws(() => {
+    const signOptions = { key: rsaKeyPemEncrypted, passphrase: 'wrong' };
+    rsaSign.sign(signOptions, 'hex');
+  }, decryptError);
+}
 
 //
 // Test RSA signing and verification

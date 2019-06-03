@@ -64,7 +64,7 @@ function checkMethods(certificate) {
 }
 
 function stripLineEndings(obj) {
-  return obj.replace(/\n/g, '');
+  return obj.replace(/\r?\n/g, '');
 }
 
 // Direct call Certificate() should return instance
